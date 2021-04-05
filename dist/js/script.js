@@ -75,7 +75,7 @@ function setClock(selector, endTime) {
         minutes = timer.querySelector('#minutes'),
         seconds = timer.querySelector('#seconds'),
         timeInterval = setInterval(updateClock, 1000);
-    
+
     updateClock();
 
     function updateClock() {
@@ -98,13 +98,18 @@ const modalTrigger = document.querySelectorAll('[data-modal]'),
       modal = document.querySelector('.modal'),
       modalCLoseBtn = document.querySelector('[data-close]');
 
-modalTrigger.forEach(btn => {
-    btn.addEventListener('click', () => {
+    function openModal() {
         modal.classList.add('show');
         modal.classList.remove('hide');
         document.body.style.overflow = 'hidden';
-    });
-})
+        clearInterval(modalTimerId)
+    }
+
+modalTrigger.forEach(btn => {
+    btn.addEventListener('click', openModal);
+});
+
+
 function closeModal() {
     modal.classList.add('hide');
     modal.classList.remove('show');
@@ -124,35 +129,33 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// // Modal
-// const modalBtn = document.querySelectorAll('[data-modal]'),
-//       modal = document.querySelector('.modal'),
-//       modalCloseBtn = document.querySelector('[data-close]');
+const modalTimerId = setTimeout(openModal, 5000);
 
-// modalBtn.forEach(btn => {
-//     btn.addEventListener('click', () => {
-//         modal.classList.add('show');
-//         modal.classList.remove('hide');
-//         document.body.style.overflow = 'hidden';
-//     });
-// });
+function showModalByScroll() {
+    if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+        openModal();
+        window.removeEventListener('scroll', showModalByScroll)
+    }
+}
 
-// function closeBtn() {
-//     modal.classList.add('hide');
-//     modal.classList.remove('show');
-//     document.body.style.overflow = '';
-// }
-// modalCloseBtn.addEventListener('click', closeBtn());
+window.addEventListener('scroll', showModalByScroll)
 
-// modal.addEventListener('click', (e) => {
-//     if(e.target === modal){
-//         closeBtn();
-//     }
-// });
-// document.addEventListener('keydown', (e) => {
-//     if(e.code === 'Escape' && modal.classList.contains('show')){
-//         closeBtn();
-//     }
-// });
+
+// const btn = document.querySelector('button');
+
+// btn.addEventListener('click', function() {
+//     this.style.backgroundColor = "red";
+// })
+
+const obj = {
+    num: 5,
+    sayNumber: function () {
+        const say = () => {
+            console.log(this);
+        }
+        say();
+    }
+}
+obj.sayNumber();
 
 });
